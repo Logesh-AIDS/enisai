@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enisai - Song Recommendation</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #34495e;
+            font-size: 1.8rem;
+            margin-top: 30px;
+        }
+
+        h4 {
+            color: #16a085;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        input[type="file"]:hover {
+            border-color: #16a085;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #16a085;
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1abc9c;
+        }
+
+        /* Song List Styling */
+        #song-list {
+            list-style-type: none;
+            margin-top: 20px;
+            padding: 0;
+        }
+
+        #song-list li {
+            background-color: #fff;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ecf0f1;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            text-align: left;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        #song-list li:hover {
+            transform: scale(1.05);
+        }
+
+        /* Loader Styles */
+        #loader {
+            margin-top: 30px;
+            font-size: 2rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            button {
+                font-size: 1rem;
+            }
+
+            input[type="file"] {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎵 Welcome to Enisai 🎵</h1>
+    <p>Upload your voice to get personalized song recommendations.</p>
+
+    <!-- Form to upload audio -->
+    <form action="/upload" method="post" enctype="multipart/form-data" id="upload-form">
+        <input type="file" name="audio" accept="audio/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <!-- Display the song type and song list -->
+    <div id="loader" style="display:none;">Processing... Please wait.</div>
+    <div id="song-results" style="display:none;">
+        <h4 id="song-type"></h4>
+        <h3>Recommended Songs:</h3>
+        <ul id="song-list">
+            <!-- Songs will be displayed here after upload -->
+        </ul>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const songList = document.getElementById('song-list');
+        const loader = document.getElementById('loader');
+        const songResults = document.getElementById('song-results');
+        const songTypeDisplay = document.getElementById('song-type');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            // Show loader
+            loader.style.display = 'block';
+            songResults.style.display = 'none';  // Hide previous results
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const songs = data.recommended_songs;
+                songList.innerHTML = '';  // Clear existing list
+
+                // Display the song type
+                songTypeDisplay.textContent = `Song Type You Can Sing: ${data.song_type}`;
+                
+                // Display the recommended songs
+                songs.forEach(song => {
+                    const li = document.createElement('li');
+                    li.textContent = song;
+                    songList.appendChild(li);
+                });
+
+                // Hide loader and show song results
+                loader.style.display = 'none';
+                songResults.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loader.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>
