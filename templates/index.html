@@ -3,145 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enisai - Song Recommendation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Song Recommendation</title>
     <style>
+        /* General Body Styling */
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
 
+        /* Centering the content */
         .container {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 50px auto;
             padding: 20px;
-            width: 90%;
-            max-width: 600px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1, h2 {
+            color: #333;
             text-align: center;
         }
 
         h1 {
-            color: #333;
-            font-size: 2.5rem;
+            font-size: 2.5em;
             margin-bottom: 20px;
         }
 
-        .upload-container {
+        h2 {
+            font-size: 1.8em;
+            color: #007BFF;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="file"] {
             margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
         }
 
-        .upload-container input[type="file"] {
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 2px solid #007bff;
-            cursor: pointer;
-            background-color: #f0f8ff;
-            transition: background-color 0.3s;
-        }
-
-        .upload-container input[type="file"]:hover {
-            background-color: #d1e7ff;
-        }
-
-        .btn {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            border-radius: 8px;
+        button {
+            background-color: #007BFF;
+            color: #fff;
             border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: 20px;
         }
 
-        .btn:hover {
+        button:hover {
             background-color: #0056b3;
         }
 
-        .result-container {
-            margin-top: 30px;
-            display: none;
-            text-align: left;
-            padding: 15px;
-            background-color: #f0f8ff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .result-container h3 {
-            color: #007bff;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .result-container ul {
-            list-style: none;
+        /* Song List Styling */
+        ul {
+            list-style-type: none;
             padding: 0;
+            margin-top: 20px;
         }
 
-        .result-container ul li {
-            padding: 8px;
-            font-size: 1.1rem;
+        li {
+            background-color: #f1f1f1;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        li:hover {
+            background-color: #e0e0e0;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 14px;
             color: #555;
-            margin-bottom: 6px;
-            border-radius: 4px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .result-container ul li:hover {
-            background-color: #d1e7ff;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .btn {
-                width: 100%;
-                font-size: 1rem;
-            }
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Welcome to Enisai</h1>
-    <p>Upload your voice recording, and we'll recommend songs based on your vocal features!</p>
-
-    <div class="upload-container">
+    <div class="container">
+        <h1>Upload Your Voice Recording</h1>
         <form action="/upload" method="POST" enctype="multipart/form-data">
             <input type="file" name="file" accept="audio/*" required>
-            <button type="submit" class="btn">Upload and Get Recommendation</button>
+            <button type="submit">Upload</button>
         </form>
+
+        {% if song_type %}
+            <h2>Recommended Song Category: {{ song_type }}</h2>
+            <ul>
+                {% for song in recommended_songs %}
+                    <li>{{ song }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 
-    {% if song_type %}
-    <div class="result-container">
-        <h3>Recommended Song Category: {{ song_type }}</h3>
-        <ul>
-            {% for song in recommended_songs %}
-            <li>{{ song }}</li>
-            {% endfor %}
-        </ul>
+    <div class="footer">
+        <p>&copy; 2025 Song Recommendation Platform. All rights reserved.</p>
     </div>
-    {% endif %}
-</div>
-
 </body>
 </html>
