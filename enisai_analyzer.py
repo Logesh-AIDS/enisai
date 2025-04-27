@@ -113,7 +113,7 @@ def recommend_songs(features):
             "Nella Fantasia - Sarah Brightman", "Con te partirò - Andrea Bocelli",
             "Di Capua - O Sole Mio", "The Prayer - Andrea Bocelli & Celine Dion",
             "La Donna è Mobile - Verdi", "Casta Diva - Bellini"
-        ]# Add all the song categories as in your original code
+        ]
     }
 
     # Basic matching logic (later replaced with ML)
