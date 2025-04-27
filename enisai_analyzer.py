@@ -1,6 +1,4 @@
-# enisai_app.py
-
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import librosa
 import numpy as np
 import os
@@ -115,7 +113,7 @@ def recommend_songs(features):
             "Nella Fantasia - Sarah Brightman", "Con te partirò - Andrea Bocelli",
             "Di Capua - O Sole Mio", "The Prayer - Andrea Bocelli & Celine Dion",
             "La Donna è Mobile - Verdi", "Casta Diva - Bellini"
-        ]
+        ]# Add all the song categories as in your original code
     }
 
     # Basic matching logic (later replaced with ML)
@@ -152,10 +150,12 @@ def upload_file():
     features = extract_features(file_path)
     category, songs = recommend_songs(features)
 
-    return jsonify({
-        "song_type": category,
-        "recommended_songs": songs
-    })
+    return render_template('index.html', song_type=category, recommended_songs=songs)
+
+# Homepage route
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
