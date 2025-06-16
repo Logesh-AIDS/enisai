@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: enisai-backend
+    runtime: python
+    buildCommand: ""
+    startCommand: "python enisai_analyzer.py"
